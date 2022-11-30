@@ -1,0 +1,24 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ReadOnlyQuery {
+    public final String label;
+    public final String query;
+    public final String description;
+
+    public ReadOnlyQuery(String label, String query, String description) {
+        this.label = label;
+        this.query = query;
+        this.description = description;
+    }
+
+    public ReadOnlyQueryResult run(Connection connection) throws SQLException {
+        try(Statement statement = connection.createStatement()) {
+            try(ResultSet resultSet = statement.executeQuery(query)) {
+               return ReadOnlyQueryResult.fromResultSet(resultSet);
+            }
+        }
+    }
+}
+
